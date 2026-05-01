@@ -70,7 +70,7 @@ class Projet
   end
 
   def open(mode)
-    mode ||= :finder
+    mode ||= 'finder'
     case mode
     when 'finder' then open_in_finder
     when 'ide' then open_in_ide

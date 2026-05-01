@@ -73,7 +73,7 @@ end
 
 # ── Comportement standard ─────────────────────────────────────────────────
 puts "RUBY VERSION : #{RUBY_VERSION}"
-puts "Entrée dans handler.rb"
+# puts "Entrée dans handler.rb"
 
 # === À toi de jouer en dessous ===========================================
 # `p_value` contient le chemin décodé passé via ?p=...

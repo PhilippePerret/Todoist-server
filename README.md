@@ -15,6 +15,13 @@ Par exemple, en cliquant sur un lien « **Commencer le travail** » dans Todoi
 
 Oui, à partir d'un simple clic sur la tâche !
 
+### Requis
+
+Pour le moment, pour que ça fonctionne, il faut : 
+
+* `rbenv` pour gérer les version ruby
+* la version ruby 3.4.7
+
 ### Warning
 
 Cette application est encore à l'état de développement, elle fonctionne parfaitement mais l'installation n'est pas encore optimisée.

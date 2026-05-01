@@ -21,7 +21,8 @@ PORT = 8000
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HANDLER  = os.path.join(BASE_DIR, "handler.rb")
-RUBY     = "/Users/philippeperret/.rbenv/versions/3.4.7/bin/ruby"
+RUBY = f"{os.path.expanduser('~')}/.rbenv/versions/3.4.7/bin/ruby"
+# RUBY     = "/Users/philippeperret/.rbenv/versions/3.4.7/bin/ruby"
 
 # Sur Unix, demander au noyau de récolter automatiquement les enfants
 # zombies (on ne fait jamais wait() sur les sous-processus Ruby).
@@ -75,6 +76,9 @@ class TodoistHandler(BaseHTTPRequestHandler):
 
 
 def main():
+    home = os.path.expanduser("~")
+    rc = ".zshrc" if os.path.exists(f"{home}/.zshrc") else ".bashrc"
+    os.environ['SHELL_RC'] = f"{home}/{rc}"
     server = ThreadingHTTPServer((HOST, PORT), TodoistHandler)
     try:
         server.serve_forever()
