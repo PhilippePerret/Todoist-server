@@ -52,12 +52,17 @@ class Script
     end
   end
 
+  def run_as_tss_script
+    require_relative 'script_tss.rb'
+    eval_as_tss_ascript
+  end
+
   def run_as_self_script
     `source #{ENV['SHELL_RC']} 2>/dev/null && #{APP_BY_EXTNAME[File.extname(name)]} "#{path}"`
   end
 
 
-  def run_as_bash
+  def run_as_bash_script
     final_code = <<~BASH
     #!/usr/bin/env zsh
     cd "#{projet.path}"

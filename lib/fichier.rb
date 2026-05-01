@@ -12,6 +12,24 @@ class Fichier
     end
   end
 
+  # Pour les changements de version
+  # Cette méthode reçoit un path comme défini dans une commande, c'est-à-dire avec
+  # le format particulier "<root_name>.<extension>" alors que le fichier doit avoir la
+  # forme "<root_name>-vX.Y.Z.<extension>".
+  # @return le path trouvé ou nil si non trouvé
+  def self.find_as_versioned(path)
+    # puts "path testée : #{path.inspect}"
+    nf = File.basename(path)
+    folder = File.dirname(path)
+    root = File.basename(nf, File.extname(nf))
+    extn = File.extname(nf)[1...]
+    reg_name = /#{root}[-_.]v([0-9.]+)\.#{extn}/
+    # puts "reg name: #{reg_name.inspect}"
+    candidats = Dir.entries(folder).select { |f| f.match?(reg_name) }
+    candidat = candidats.sort.last
+    candidat && File.join(folder, candidat)
+  end
+
   attr_reader :path
 
   def initialize(path)
@@ -21,6 +39,7 @@ class Fichier
   # Commande pour ouvrir le fichier
   def open
     `open "#{path}"`
+    puts "⚙️ Ouverture du fichier #{name.inspect}."
   end
 
   # Produire la version majeure suivante
@@ -29,7 +48,6 @@ class Fichier
     FileUtils.copy(path, next_major_version_file)
     archive_file
   end
-
 
   # Produire la version mineur suivante
   def do_next_minor_version

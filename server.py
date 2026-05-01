@@ -22,7 +22,6 @@ PORT = 8000
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HANDLER  = os.path.join(BASE_DIR, "handler.rb")
 RUBY = f"{os.path.expanduser('~')}/.rbenv/versions/3.4.7/bin/ruby"
-# RUBY     = "/Users/philippeperret/.rbenv/versions/3.4.7/bin/ruby"
 
 # Sur Unix, demander au noyau de récolter automatiquement les enfants
 # zombies (on ne fait jamais wait() sur les sous-processus Ruby).

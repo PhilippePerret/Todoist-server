@@ -28,5 +28,6 @@ def erreur(msg)
   Error.add_errors(msg)
   msg = msg.map { |seg| "### #{seg}" }.join("\n")
   puts msg
+  return false
 end
 

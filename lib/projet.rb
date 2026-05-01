@@ -33,6 +33,7 @@ class Projet
 
 
   attr_reader :id, :path
+  alias :folder :path
 
   def initialize(id)
     @id   = id

@@ -6,7 +6,7 @@
 
 Il existe **TROIS FORMES de scripts** dans Todoist-Server.
 
-* Les **scripts TSS** (pour Todois Server Script) qui utilisent des commandes propres à Todoist-Server et donc sont limités aux commandes existantes (mais qui peuvent évoler au fur et à mesure des demandes et besoins des utilisateurs.
+* Les **scripts TSS** (pour Todois Server Script) qui utilisent des commandes propres à Todoist-Server et donc sont limités aux commandes existantes (mais qui peuvent évoler au fur et à mesure des demandes et besoins des utilisateurs. **C’est le type de script des utilisateurs qui ne programment pas du tout.**
   Leur extension est **`.tss`**
   En savoir plus sur [les scripts TSS](#tss-scripts).
 
@@ -28,7 +28,147 @@ Il existe **TROIS FORMES de scripts** dans Todoist-Server.
 
 ### Les script TSS
 
+Ce type de script est le plus simple, puisqu’il se compose à l’aide de commandes « humaines » mais c’est aussi le plus limité. On ne peut utiliser que les commandes définies par l’application.
 
+> ATTENTION : si ces commandes sont plus simples car plus humaine, elles n’en restent pas moins des « commandes » et, donc, nécessitent de respecter leur expression à la virgule près. 😊
+
+Ce script se présente simplement comme une liste de commandes les unes au-dessous des autres. Par exemple : 
+
+~~~bash
+# Ceci est un commentaire
+afficher le dossier
+nouvelle version mineure de "roman.odt"
+ouvrir le fichier "roman_v.odt"
+~~~
+
+
+
+Ces commandes sont les suivantes :
+
+| Produit                         | Description                                                  |
+| ------------------------------- | ------------------------------------------------------------ |
+| Pour créer une nouvelle version | [Nouvelle version majeure](#new-major-version)<br />[Nouvelle version mineur](#new-minor-version)<br />[Nouvelle version patch](#new-patch-version) |
+| Ouvrir un fichier versionné     | [Ouvrir un fichier versionné](#open-versioned-file)          |
+| Ouvrir un fichier précis        | [Ouvrir un fichier](#open-file)                              |
+|                                 |                                                              |
+
+<a name="new-major-version"></a>
+
+---
+
+### **Nouvelle version majeure**
+
+Fera passer le fichier `fichier-v12` à `fichier-v13`, le fichier `file-v12.5` à `file-v13.0`, etc.
+
+**Commande anglaise**
+
+~~~bash
+new major version of "root name.ext"
+~~~
+
+**Commande française**
+
+~~~bash
+nouvelle version majeure de "nom racine.ext"
+~~~
+
+Si le fichier est `monfichier-v12.4.569.odt`, le **nom racine** est `monfichier.odt`. Ne pas oublier l’extension.
+
+
+<a name="new-minor-version"></a>
+
+---
+
+### **Nouvelle version mineure**
+
+<a name="new-patch-version"></a>
+
+Fait passer le fichier `fichier-v12.4` et `roman-v12.4.13` à, respectivement `fichier-v12.5` et `roman-v12.5.0`.
+
+**Commande anglaise**
+
+~~~bash
+new minor version of "root name.ext"
+~~~
+
+**Commande française**
+
+~~~bash
+nouvelle version mineure de "nom racine.ext"
+~~~
+
+Si le fichier est `monfichier-v12.4.569.odt`, le **nom racine** est `monfichier.odt`. Ne pas oublier l’extension.
+
+---
+
+### **Nouvelle version patch**
+
+Fait passer le fichier `fichier_v12.4.5` à `fichier_v12.4.6`.
+
+**Commande anglaise**
+
+~~~bash
+new patch version of "root name.ext"
+new patch of "root name.ext"
+~~~
+
+**Commande française**
+
+~~~bash
+nouvelle version patch de "nom racine.ext"
+nouveau patch de "nom racine.ext"
+~~~
+
+Si le fichier est `monfichier-v12.4.569.odt`, le **nom racine** est `monfichier.odt`. Ne pas oublier l’extension.
+
+<a name="open-file"></a>
+
+---
+
+### **Ouvrir un fichier précis**
+
+**Commande anglaise**
+
+~~~bash
+open file "mon_fichier_exact.md"
+~~~
+
+**Commande française**
+
+~~~bash
+ouvrir le fichier "mon_fichier_exact.md"
+~~~
+
+
+
+
+<a name="open-versioned-file"></a>
+
+---
+
+### **Ouvrir un fichier versionné**
+
+Ouvre le fichier versionné courant d’empreinte « root name.odt ». L’empreinte est nécessaire car on ne connait jamais, *a priori*, le numéro de version courant du fichier.
+
+**Commande anglaise**
+
+~~~bash
+open file "root name.odt"
+~~~
+
+
+
+**Commande française**
+
+~~~bash
+ouvrir le fichier "root name.odt"
+~~~
+
+Si le fichier exact s’appelle `root name-v2.12.odt`, c’est lui qui sera ouvert.
+
+
+
+---
 
 Une commande pour obtenir directement l’appel serveur à utiliser, pour le projet donné.
 
