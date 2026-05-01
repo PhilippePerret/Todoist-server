@@ -1,5 +1,7 @@
 require 'yaml'
 require 'json'
+require 'fileutils'
+require_relative 'error'
 
 MONTHS_FR = %w[janvier février mars avril mai juin juillet août septembre octobre novembre décembre]
 

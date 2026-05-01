@@ -1,0 +1,1 @@
+Un fichier avec version majeure, mineure et patch.

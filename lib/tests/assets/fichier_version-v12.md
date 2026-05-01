@@ -1,0 +1,1 @@
+Un fichier avec version majeure seulement et autre déliminteur de version.

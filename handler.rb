@@ -32,12 +32,6 @@ def param(params, key)
   v && !v.empty? ? v.first : nil
 end
 
-def erreur(msg)
-  msg = [msg] unless msg.is_a?(Array)
-  msg = msg.map { |seg| "### #{seg}" }.join("\n")
-  puts msg
-end
-
 # ── Minuteur : servir la page HTML dans la fenêtre 8000 ──────────────────
 if t_min = param(params, 't')
   t_sec = (t_min.to_f * 60).to_i
