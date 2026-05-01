@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="60%" y2="100%">
+      <stop offset="0%" stop-color="#E8483A"/>
+      <stop offset="100%" stop-color="#B83028"/>
+    </linearGradient>
+    <clipPath id="clip">
+      <rect width="512" height="512" rx="112" ry="112"/>
+    </clipPath>
+  </defs>
+
+  <!-- Fond rouge arrondi -->
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#bg)"/>
+
+  <g clip-path="url(#clip)">
+    <!-- Coche style Todoist -->
+    <polyline points="78,235 188,348 372,130"
+              fill="none" stroke="white" stroke-width="58"
+              stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Badge serveur (cercle blanc, coin bas-droite) -->
+    <circle cx="385" cy="388" r="78" fill="white" opacity="0.96"/>
+
+    <!-- Rack serveur : 3 rangées -->
+    <rect x="328" y="354" width="114" height="19" rx="5" fill="#DB4035"/>
+    <circle cx="409" cy="363.5" r="5" fill="white"/>
+    <circle cx="424" cy="363.5" r="5" fill="white"/>
+    <rect x="334" cy="363.5" width="60" height="4" rx="2" fill="white" opacity="0.4" y="361.5"/>
+
+    <rect x="328" y="379" width="114" height="19" rx="5" fill="#DB4035"/>
+    <circle cx="409" cy="388.5" r="5" fill="white"/>
+    <circle cx="424" cy="388.5" r="5" fill="white"/>
+    <rect x="334" y="386.5" width="60" height="4" rx="2" fill="white" opacity="0.4"/>
+
+    <rect x="328" y="404" width="114" height="19" rx="5" fill="#DB4035"/>
+    <circle cx="409" cy="413.5" r="5" fill="white"/>
+    <circle cx="424" cy="413.5" r="5" fill="white"/>
+    <rect x="334" y="411.5" width="60" height="4" rx="2" fill="white" opacity="0.4"/>
+  </g>
+</svg>

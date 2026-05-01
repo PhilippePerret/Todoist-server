@@ -1,0 +1,4 @@
+#!/bin/bash
+# Exécutable du bundle .app : lance le serveur Python.
+cd "/Users/philippeperret/Programmes/Todoist-server" || exit 1
+exec /usr/bin/env python3 server.py

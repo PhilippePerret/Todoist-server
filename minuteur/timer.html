@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<title>Minuteur</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --accent: #CCC;
+    /* --accent: #c8f060; */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 24px 20px 30px;
+    gap: 14px;
+    transition: background 1.2s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.10) 3px, rgba(0,0,0,0.10) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .clock-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 380px;
+    height: 380px;
+  }
+
+  .clock {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-shadow:
+      0 0 30px color-mix(in srgb, var(--accent) 50%, transparent),
+      0 0 80px color-mix(in srgb, var(--accent) 20%, transparent);
+    position: relative;
+    z-index: 1;
+    transition: color 1s;
+  }
+
+  body.warn  .clock { --accent: #ff8c00; }
+  body.end   .clock { --accent: #ff2020; }
+
+  .ring-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: #1a1a28;
+    stroke-width: 4;
+  }
+
+  .ring-progress {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 1s;
+    filter: drop-shadow(0 0 6px var(--accent));
+  }
+
+  body.warn     .ring-progress { --accent: #ff8c00; }
+  body.end      .ring-progress { --accent: #ff2020; }
+  body.overtime .clock         { --accent: #50fa7b; animation: none; }
+  body.overtime .ring-progress { --accent: #50fa7b; }
+
+  .btn-row {
+    margin-top: 28px;
+    display: flex;
+    gap: 16px;
+  }
+  .ctrl-btn {
+    background: none;
+    border: 1px solid #333;
+    color: #555;
+    font-family: monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    padding: 7px 20px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .ctrl-btn              { color: #bbb; border-color: #777; }
+  .ctrl-btn:hover         { color: #eee; border-color: #bbb; }
+  .ctrl-btn.stop          { color: #ff6060; border-color: #cc3333; }
+  .ctrl-btn.stop:hover    { color: #ff9090; border-color: #ff4444; }
+  .ctrl-btn.close-btn     { color: #888; border-color: #555; }
+  .ctrl-btn.close-btn:hover  { color: #bbb; border-color: #888; }
+  .ctrl-btn.start             { color: #c8f060; border-color: #6a8a20; }
+  .ctrl-btn.start:hover       { color: #e0ff80; border-color: #c8f060; }
+  .ctrl-btn.valider           { color: #c8f060; border-color: #6a8a20; padding: 8px 36px; }
+  .ctrl-btn.valider:hover     { color: #e0ff80; border-color: #c8f060; }
+
+  #todo-panel {
+    display: none;
+    width: 100%; max-width: 560px;
+    max-height: 200px; overflow-y: auto;
+    background: #0d0d14;
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 12px 16px;
+  }
+  .todo-content { color: #ccc; font-size: 19px; line-height: 1.6; font-family: monospace; }
+  .todo-content h1, .todo-content h2, .todo-content h3 { color: #eee; font-size: 19px; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .todo-content ul, .todo-content ol { padding-left: 18px; margin-bottom: 8px; }
+  .todo-content li   { margin-bottom: 3px; }
+  .todo-content p    { margin-bottom: 8px; }
+  .todo-content code { background: #1a1a28; padding: 1px 4px; border-radius: 2px; color: #CCC; }
+  .todo-content strong { color: #ddd; }
+
+  #bilan-panel {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; max-width: 600px;
+    gap: 12px;
+  }
+  .bilan-title { font-family: monospace; font-size: 12px; letter-spacing: 0.3em; color: #999; text-transform: uppercase; }
+  .bilan-cols  { display: flex; gap: 12px; width: 100%; }
+  .bilan-col   { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .bilan-col label { font-family: monospace; font-size: 13px; letter-spacing: 0.2em; color: #999; text-transform: uppercase; }
+  .bilan-ta {
+    background: #0d0d14; color: #ddd;
+    border: 1px solid #999;
+    font-family: monospace; font-size: 19px; line-height: 1.5;
+    padding: 10px; width: 100%; height: 320px;
+    resize: vertical; outline: none; border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+  .bilan-ta:focus { border-color: #aaa; }
+</style>
+</head>
+<body>
+
+<div id="todo-panel"></div>
+
+<div id="timer-area" style="display:flex;flex-direction:column;align-items:center">
+<div class="clock-wrap">
+  <svg class="ring-svg" viewBox="0 0 380 380">
+    <circle class="ring-bg"       cx="190" cy="190" r="178"/>
+    <circle class="ring-progress" id="ring" cx="190" cy="190" r="178"/>
+  </svg>
+  <div class="clock" id="clock">--:--</div>
+</div>
+
+<div class="btn-row">
+  <button class="ctrl-btn start" id="startBtn" onclick="startTimer()">&#x25B6; DÉMARRER</button>
+  <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">⏸ PAUSE</button>
+  <button class="ctrl-btn stop" id="stopBtn" onclick="stopTimer()">&#x25A0; STOP</button>
+  <button class="ctrl-btn close-btn" onclick="window.location.href='about:blank'">&#x2715; FERMER</button>
+</div>
+</div>
+
+<div id="bilan-panel">
+  <div class="bilan-title">Bilan de séance</div>
+  <div class="bilan-cols">
+    <div class="bilan-col">
+      <label>Ce qui a été fait</label>
+      <textarea id="doneTa" class="bilan-ta" placeholder="Format markdown…"></textarea>
+    </div>
+    <div class="bilan-col">
+      <label>À faire la prochaine fois</label>
+      <textarea id="todoTa" class="bilan-ta" placeholder="Format markdown…"></textarea>
+    </div>
+  </div>
+  <button class="ctrl-btn valider" onclick="validerBilan()">&#x2713; VALIDER</button>
+</div>
+
+<script>
+  const R = 178;
+  const CIRCUMFERENCE = 2 * Math.PI * R;
+  const ring = document.getElementById('ring');
+  ring.setAttribute('stroke-dasharray', CIRCUMFERENCE);
+  ring.setAttribute('stroke-dashoffset', 0);
+
+  try { window.resizeTo(600, 640); } catch(e) {}
+
+  const TodoContent = null;  // ← remplacé par handler.rb si tâches existantes
+  const urlParams = new URLSearchParams(window.location.search);
+  const TOTAL = parseInt(urlParams.get('t') || '300', 10);
+  const PROJECT = urlParams.get('p') || '';
+
+  let elapsedAtStop = 0;
+
+  let startTime   = null;  // timestamp rAF au 1er tick
+  let pauseStart  = null;  // performance.now() au moment de la pause
+  let totalPaused = 0;     // ms de pause cumulées
+  let paused          = false;
+  let warned          = false;
+  let ended           = false;
+  let overtime        = false;
+  let overtimeTimeout = null;
+
+  function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
+
+  // Secondes réellement jouées (pauses exclues)
+  function elapsedAt(ts) {
+    return (ts - startTime - totalPaused) / 1000;
+  }
+
+  function tick(ts) {
+    if (!startTime) startTime = ts;
+    if (paused) return;
+
+    // Mode overtime : affichage +total_elapsed en vert
+    if (overtime) {
+      const tot = elapsedAt(ts);
+      const h = Math.floor(tot / 3600);
+      const m = Math.floor((tot % 3600) / 60);
+      const s = Math.floor(tot % 60);
+      document.getElementById('clock').textContent =
+        h > 0 ? `+${pad(h)}:${pad(m)}:${pad(s)}` : `+${pad(m)}:${pad(s)}`;
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    const elapsed   = elapsedAt(ts);
+    const remaining = Math.max(0, TOTAL - elapsed);
+
+    // Affichage
+    const h = Math.floor(remaining / 3600);
+    const m = Math.floor((remaining % 3600) / 60);
+    const s = Math.floor(remaining % 60);
+    document.getElementById('clock').textContent =
+      h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+
+    // Anneau
+    ring.setAttribute('stroke-dashoffset', CIRCUMFERENCE * (1 - remaining / TOTAL));
+
+    // Alerte 10 min → AppleScript via serveur
+    if (!warned && remaining <= 600 && remaining > 0) {
+      warned = true;
+      document.body.classList.add('warn');
+      fetch('http://localhost:8000?warn=true').catch(() => {});
+    }
+
+    // Temps écoulé : rouge + AppleScript ; après 30s sans Stop → overtime vert
+    if (remaining <= 0 && !ended) {
+      ended = true;
+      document.body.classList.remove('warn');
+      document.body.classList.add('end');
+      fetch('http://localhost:8000?warn=true').catch(() => {});
+      overtimeTimeout = setTimeout(() => {
+        overtime = true;
+        document.body.classList.remove('end');
+        document.body.classList.add('overtime');
+      }, 30000);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  // ── Gestion des états ──────────────────────────────────
+  function setState(state) {
+    document.getElementById('todo-panel').style.display  = 'none';
+    document.getElementById('timer-area').style.display  = 'none';
+    document.getElementById('bilan-panel').style.display = 'none';
+    if (state === 'prelaunch') {
+      document.getElementById('todo-panel').style.display  = 'block';
+      document.getElementById('timer-area').style.display  = 'flex';
+      document.getElementById('startBtn').style.display    = 'inline-block';
+      document.getElementById('pauseBtn').style.display    = 'none';
+      document.getElementById('stopBtn') && (document.getElementById('stopBtn').style.display = 'none');
+      const h = Math.floor(TOTAL/3600), m = Math.floor((TOTAL%3600)/60), s = TOTAL%60;
+      document.getElementById('clock').textContent = h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+    } else if (state === 'running') {
+      if (TodoContent) document.getElementById('todo-panel').style.display = 'block';
+      document.getElementById('timer-area').style.display  = 'flex';
+      document.getElementById('startBtn').style.display    = 'none';
+      document.getElementById('pauseBtn').style.display    = 'inline-block';
+      document.getElementById('stopBtn').style.display     = 'inline-block';
+    } else if (state === 'bilan') {
+      document.getElementById('bilan-panel').style.display = 'flex';
+    }
+  }
+
+  function startTimer()   { setState('running'); requestAnimationFrame(tick); }
+
+  function validerBilan() {
+    const done = document.getElementById('doneTa').value.trim();
+    const todo = document.getElementById('todoTa').value.trim();
+    const qs   = new URLSearchParams({ stop: 'true', elapsed: elapsedAtStop, p: PROJECT, done, todo });
+    window.location.href = 'http://localhost:8000?' + qs.toString();
+  }
+
+  // ── Initialisation ───────────────────────────────────────
+  if (TodoContent) {
+    document.getElementById('todo-panel').innerHTML =
+      '<div class="todo-content">' + marked.parse(TodoContent) + '</div>';
+    setState('prelaunch');
+  } else {
+    setState('running');
+    requestAnimationFrame(tick);
+  }
+
+  function togglePause() {
+    if (paused) {
+      totalPaused += performance.now() - pauseStart;
+      pauseStart = null;
+      paused = false;
+      document.getElementById('pauseBtn').textContent = '⏸ PAUSE';
+      document.body.classList.remove('paused');
+      requestAnimationFrame(tick);
+    } else {
+      pauseStart = performance.now();
+      paused = true;
+      document.getElementById('pauseBtn').textContent = '▶ REPRENDRE';
+      document.body.classList.add('paused');
+    }
+  }
+
+  function stopTimer() {
+    if (!startTime) return;
+    if (overtimeTimeout) { clearTimeout(overtimeTimeout); overtimeTimeout = null; }
+    paused = true;
+    const now     = (pauseStart !== null) ? pauseStart : performance.now();
+    const elapsed = Math.round(elapsedAt(now));
+    elapsedAtStop = elapsed;
+    setState('bilan');
+  }
+</script>
+</body>
+</html>
