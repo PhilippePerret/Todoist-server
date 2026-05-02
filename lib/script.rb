@@ -58,7 +58,7 @@ class Script
   end
 
   def run_as_self_script
-    `source #{ENV['SHELL_RC']} 2>/dev/null && #{APP_BY_EXTNAME[File.extname(name)]} "#{path}"`
+    `source #{ENV['SHELL_RC']} 2>/dev/null && cd "#{projet.path}" && #{APP_BY_EXTNAME[File.extname(name)]} "#{path}"`
   end
 
 
