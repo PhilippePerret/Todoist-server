@@ -36,6 +36,7 @@ end
 if minutes = param(params, 't')
   require_relative 'minuteur/minuteur'
   Minuteur.run(param(params, 'p'), minutes, params) # note : le projet n'est pas forcément défini
+  exit 0
 end
 
 # ── Signaux JS → AppleScript (réponses AJAX courtes) ─────────────────────

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<!-- Pour conversion markdown -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <title>Minuteur</title>
 <style>
@@ -321,6 +322,7 @@
   }
 
   function launchTimer() {
+    /*
     if (!isPopup) {
       const popupUrl = window.location.href + '&popup=1';
       const pop = window.open(popupUrl, 'todoist_timer',
@@ -335,9 +337,10 @@
         return;
       }
     }
+    //*/
     // On EST la popup (ou popup bloquée) : gérer le TodoContent ici
     if (!timerLaunched && TodoContent) {
-      setState('prelaunch');  // 1ère fois : montrer le todo
+      setState('prelaunch');  // 1re fois : montrer le todo
     } else {
       setState('running');
       startTicking();
@@ -385,6 +388,23 @@
     elapsedAtStop = Math.round(getElapsedSeconds());
     setState('bilan');
   }
+
+
+  // Pour ouvrir une nouvelle fenêtre dans laquelle s'ouvriront
+  // les prochaines commandes TodoistServer
+  const TIMER_PATH = 'http://localhost:8000?'
+  const VWP_WIDTH = window.innerWidth
+  const VWP_HEIGHT = window.outerHeight
+  const VWP_X = window.screenX
+  const VWP_Y = window.screenY
+  const WIDTH = 660;
+  const LEFT = VWP_WIDTH + VWP_X
+  function OpenServerInOtherWindow() {
+    window.open(TIMER_PATH, 'todoist-server',
+          'width='+WIDTH+',height='+VWP_HEIGHT+',left='+LEFT+',top=40');
+  }
+  setTimeout(OpenServerInOtherWindow, 1000)
+
 </script>
 </body>
 </html>
