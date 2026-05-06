@@ -180,7 +180,7 @@
   <button class="ctrl-btn start" id="startBtn" onclick="startTimer()">&#x25B6; DÉMARRER</button>
   <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">⏸ PAUSE</button>
   <button class="ctrl-btn stop" id="stopBtn" onclick="stopTimer()">&#x25A0; STOP</button>
-  <button class="ctrl-btn close-btn" onclick="window.location.href='about:blank'">&#x2715; FERMER</button>
+  <button class="ctrl-btn close-btn" onclick="isPopup ? window.close() : window.location.href='about:blank'">&#x2715; FERMER</button>
 </div>
 </div>
 
@@ -211,43 +211,56 @@
   const TodoContent = null;  // ← remplacé par handler.rb si tâches existantes
   const urlParams = new URLSearchParams(window.location.search);
   const TOTAL = parseInt(urlParams.get('t') || '300', 10);
-  const PROJECT = urlParams.get('p') || '';
+  const PROJECT  = urlParams.get('p') || '';
+  const isPopup   = window.opener !== null || urlParams.get('popup') === '1';
 
   let elapsedAtStop = 0;
 
-  let startTime   = null;  // timestamp rAF au 1er tick
-  let pauseStart  = null;  // performance.now() au moment de la pause
-  let totalPaused = 0;     // ms de pause cumulées
-  let paused          = false;
-  let warned          = false;
-  let ended           = false;
-  let overtime        = false;
+  let startTime    = null;   // Date.now() au démarrage
+  let pauseStart   = null;   // Date.now() au moment de la pause
+  let totalPaused  = 0;      // ms de pause cumulées
+  let intervalId   = null;   // setInterval handle
+  let paused       = false;
+  let warned       = false;
+  let ended        = false;
+  let overtime     = false;
   let overtimeTimeout = null;
+  let timerLaunched   = false;  // true après le premier clic DEMO
 
   function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
 
-  // Secondes réellement jouées (pauses exclues)
-  function elapsedAt(ts) {
-    return (ts - startTime - totalPaused) / 1000;
+  // Secondes réellement jouées, pauses exclues (fonctionne aussi quand pause en cours)
+  function getElapsedSeconds() {
+    if (!startTime) return 0;
+    const pausedMs = (paused && pauseStart) ? (Date.now() - pauseStart) : 0;
+    return (Date.now() - startTime - totalPaused - pausedMs) / 1000;
   }
 
-  function tick(ts) {
-    if (!startTime) startTime = ts;
+  function startTicking() {
+    if (intervalId) return;
+    if (!startTime) startTime = Date.now();
+    intervalId = setInterval(tick, 250);
+  }
+
+  function stopTicking() {
+    if (intervalId) { clearInterval(intervalId); intervalId = null; }
+  }
+
+  function tick() {
     if (paused) return;
 
     // Mode overtime : affichage +total_elapsed en vert
     if (overtime) {
-      const tot = elapsedAt(ts);
+      const tot = getElapsedSeconds();
       const h = Math.floor(tot / 3600);
       const m = Math.floor((tot % 3600) / 60);
       const s = Math.floor(tot % 60);
       document.getElementById('clock').textContent =
         h > 0 ? `+${pad(h)}:${pad(m)}:${pad(s)}` : `+${pad(m)}:${pad(s)}`;
-      requestAnimationFrame(tick);
       return;
     }
 
-    const elapsed   = elapsedAt(ts);
+    const elapsed   = getElapsedSeconds();
     const remaining = Math.max(0, TOTAL - elapsed);
 
     // Affichage
@@ -265,6 +278,7 @@
       warned = true;
       document.body.classList.add('warn');
       fetch('http://localhost:8000?warn=true').catch(() => {});
+      if (isPopup) window.focus();
     }
 
     // Temps écoulé : rouge + AppleScript ; après 30s sans Stop → overtime vert
@@ -273,14 +287,13 @@
       document.body.classList.remove('warn');
       document.body.classList.add('end');
       fetch('http://localhost:8000?warn=true').catch(() => {});
+      if (isPopup) window.focus();
       overtimeTimeout = setTimeout(() => {
         overtime = true;
         document.body.classList.remove('end');
         document.body.classList.add('overtime');
       }, 30000);
     }
-
-    requestAnimationFrame(tick);
   }
 
   // ── Gestion des états ──────────────────────────────────
@@ -289,7 +302,7 @@
     document.getElementById('timer-area').style.display  = 'none';
     document.getElementById('bilan-panel').style.display = 'none';
     if (state === 'prelaunch') {
-      document.getElementById('todo-panel').style.display  = 'block';
+      if (TodoContent) document.getElementById('todo-panel').style.display = 'block';
       document.getElementById('timer-area').style.display  = 'flex';
       document.getElementById('startBtn').style.display    = 'inline-block';
       document.getElementById('pauseBtn').style.display    = 'none';
@@ -307,7 +320,31 @@
     }
   }
 
-  function startTimer()   { setState('running'); requestAnimationFrame(tick); }
+  function launchTimer() {
+    if (!isPopup) {
+      const popupUrl = window.location.href + '&popup=1';
+      const pop = window.open(popupUrl, 'todoist_timer',
+        'width=460,height=580,left=770,top=40');
+      if (pop) {
+        window.focus();
+        document.getElementById('timer-area').style.display = 'none';
+        document.getElementById('bilan-panel').style.display = 'none';
+        document.getElementById('todo-panel').style.display = 'none';
+        document.body.insertAdjacentHTML('afterbegin',
+          '<p style="color:#555;font-family:monospace;font-size:12px;letter-spacing:0.3em;padding:40px;text-align:center">⏱ MINUTEUR EN COURS</p>');
+        return;
+      }
+    }
+    // On EST la popup (ou popup bloquée) : gérer le TodoContent ici
+    if (!timerLaunched && TodoContent) {
+      setState('prelaunch');  // 1ère fois : montrer le todo
+    } else {
+      setState('running');
+      startTicking();
+    }
+  }
+
+  function startTimer() { timerLaunched = true; launchTimer(); }
 
   function validerBilan() {
     const done = document.getElementById('doneTa').value.trim();
@@ -316,27 +353,25 @@
     window.location.href = 'http://localhost:8000?' + qs.toString();
   }
 
-  // ── Initialisation ───────────────────────────────────────
+  // ── Initialisation ─────────────────────────────────────────
   if (TodoContent) {
     document.getElementById('todo-panel').innerHTML =
       '<div class="todo-content">' + marked.parse(TodoContent) + '</div>';
-    setState('prelaunch');
-  } else {
-    setState('running');
-    requestAnimationFrame(tick);
   }
+  launchTimer(); // Toujours ouvrir en popup immédiatement
 
   function togglePause() {
     if (paused) {
-      totalPaused += performance.now() - pauseStart;
+      totalPaused += Date.now() - pauseStart;
       pauseStart = null;
       paused = false;
       document.getElementById('pauseBtn').textContent = '⏸ PAUSE';
       document.body.classList.remove('paused');
-      requestAnimationFrame(tick);
+      startTicking();
     } else {
-      pauseStart = performance.now();
+      pauseStart = Date.now();
       paused = true;
+      stopTicking();
       document.getElementById('pauseBtn').textContent = '▶ REPRENDRE';
       document.body.classList.add('paused');
     }
@@ -344,11 +379,10 @@
 
   function stopTimer() {
     if (!startTime) return;
+    stopTicking();
     if (overtimeTimeout) { clearTimeout(overtimeTimeout); overtimeTimeout = null; }
     paused = true;
-    const now     = (pauseStart !== null) ? pauseStart : performance.now();
-    const elapsed = Math.round(elapsedAt(now));
-    elapsedAtStop = elapsed;
+    elapsedAtStop = Math.round(getElapsedSeconds());
     setState('bilan');
   }
 </script>

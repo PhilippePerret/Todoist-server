@@ -37,7 +37,7 @@ class Script
     # il exit du programme
     if minuteur
       require_relative '../minuteur/minuteur'
-      Minuteur.run(minuteur)
+      Minuteur.run(projet.id, minuteur)
     end
   end
 

@@ -59,7 +59,7 @@ http://localhost:8000?o=idprojet
 |              |                                                              |                                                  |
 | **`f`**      | Pour définir n’importe quel fichier ou dossier à ouvrir par le Finder. Si c’est un fichier, son extension doit définir l’application à utiliser. | Chemin absolu du fichier (sans espaces)          |
 | **`d`**      | Pour ouvrir le fichier de données du projet.<br />`http://localhost:8000?d=digest` | [ID du projet][]                                 |
-| **`script`** | Pour jouer un script défini par le projet ou un script universel (connu du serveur). Pour le détail, voir le fichier [Script de projet](./Project_Script.pdf). | Nom racine (ie sans extension) du script à jouer |
+| **`script`** | Pour jouer un script défini par le projet ou un script universel (connu du serveur). Pour le détail, voir le fichier [Script de projet](./Project_Scripts.pdf). | Nom racine (ie sans extension) du script à jouer |
 
 
 

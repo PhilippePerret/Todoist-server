@@ -2,6 +2,8 @@
 
 *(petite définition avant toute chose : une autre aide parle de « scripter un projet ». Cela désigne tout le fonctionnement de ce Todoist Server qui permet de commander un projet pour ouvrir toutes les possibilités des tâches. Ici, on apprend à **créer un script de projet**, c’est-à-dire un fichier qui va exécuter une opération précise sur le projet, par exemple changer la version d’un manuscrit et l’ouvrir)*
 
+[TOC]
+
 ## Présentation
 
 Il existe **TROIS FORMES de scripts** dans Todoist-Server.
@@ -47,16 +49,39 @@ Ces commandes sont les suivantes :
 
 | Produit                         | Description                                                  |
 | ------------------------------- | ------------------------------------------------------------ |
+| Lancer un minuteur              | [Lancer un minuteur](#run-timer)                             |
 | Pour créer une nouvelle version | [Nouvelle version majeure](#new-major-version)<br />[Nouvelle version mineur](#new-minor-version)<br />[Nouvelle version patch](#new-patch-version) |
 | Ouvrir un fichier versionné     | [Ouvrir un fichier versionné](#open-versioned-file)          |
 | Ouvrir un fichier précis        | [Ouvrir un fichier](#open-file)                              |
 |                                 |                                                              |
 
+
+
+<a name="run-timer"></a>
+
+---
+
+#### Lancer un minuteur
+
+**Commande anglaise**
+
+~~~bash
+set timer to HH:MM
+~~~
+
+**Commande française**
+
+~~~bash
+minuteur de HH:MM
+~~~
+
+> L’heure et les minutes sont obligatoire. Juste les minutes ne fonctionnerait pas.
+
 <a name="new-major-version"></a>
 
 ---
 
-### **Nouvelle version majeure**
+#### **Nouvelle version majeure**
 
 Fera passer le fichier `fichier-v12` à `fichier-v13`, le fichier `file-v12.5` à `file-v13.0`, etc.
 
@@ -79,7 +104,7 @@ Si le fichier est `monfichier-v12.4.569.odt`, le **nom racine** est `monfichier.
 
 ---
 
-### **Nouvelle version mineure**
+#### **Nouvelle version mineure**
 
 <a name="new-patch-version"></a>
 
@@ -101,7 +126,7 @@ Si le fichier est `monfichier-v12.4.569.odt`, le **nom racine** est `monfichier.
 
 ---
 
-### **Nouvelle version patch**
+#### **Nouvelle version patch**
 
 Fait passer le fichier `fichier_v12.4.5` à `fichier_v12.4.6`.
 
@@ -125,7 +150,7 @@ Si le fichier est `monfichier-v12.4.569.odt`, le **nom racine** est `monfichier.
 
 ---
 
-### **Ouvrir un fichier précis**
+#### **Ouvrir un fichier précis**
 
 **Commande anglaise**
 
@@ -146,7 +171,7 @@ ouvrir le fichier "mon_fichier_exact.md"
 
 ---
 
-### **Ouvrir un fichier versionné**
+#### **Ouvrir un fichier versionné**
 
 Ouvre le fichier versionné courant d’empreinte « root name.odt ». L’empreinte est nécessaire car on ne connait jamais, *a priori*, le numéro de version courant du fichier.
 

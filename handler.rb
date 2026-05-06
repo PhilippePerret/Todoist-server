@@ -35,11 +35,12 @@ end
 # ── Minuteur : servir la page HTML dans la fenêtre 8000 ──────────────────
 if minutes = param(params, 't')
   require_relative 'minuteur/minuteur'
-  Minuteur.run(minutes)
+  Minuteur.run(param(params, 'p'), minutes, params) # note : le projet n'est pas forcément défini
 end
 
 # ── Signaux JS → AppleScript (réponses AJAX courtes) ─────────────────────
 if param(params, 'warn') == 'true'
+  system('osascript', '-e', 'tell application "System Events" to set visible of process "TodoistServer" to true')
   system('osascript', '-e', 'tell application "TodoistServer" to activate')
   puts 'warn:ok'
   exit 0
