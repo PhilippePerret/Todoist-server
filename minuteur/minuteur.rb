@@ -1,7 +1,7 @@
 class Minuteur
   class << self
 
-    def run(projetId, minutes, params)
+    def run(projetId, minutes)
       t_sec = (minutes.to_f * 60).to_i
       # Injection des tâches à faire (remplir la variable ci-dessous)
       todo_md = Projet.get(projetId)&.todo

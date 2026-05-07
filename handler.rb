@@ -35,7 +35,7 @@ end
 # ── Minuteur : servir la page HTML dans la fenêtre 8000 ──────────────────
 if minutes = param(params, 't')
   require_relative 'minuteur/minuteur'
-  Minuteur.run(param(params, 'p'), minutes, params) # note : le projet n'est pas forcément défini
+  Minuteur.run(param(params, 'p'), minutes) # note : le projet n'est pas forcément défini
   exit 0
 end
 
