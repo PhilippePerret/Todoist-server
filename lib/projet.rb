@@ -13,6 +13,7 @@ class Projet
   end
 
   def self.define(id, path, name)
+    return erreur("L'identifiant du projet n'est pas défini…") if id.nil?
     dataProjets = YAML.safe_load(IO.read(datafile), **YAML_OPTIONS)
     if dataProjets[id.to_sym]
       dataProjets[id.to_sym] = path
@@ -91,6 +92,7 @@ class Projet
 
   def open_data_file
     `open -a CotEditor #{datafile}`
+    puts "Ouverture du fichier données du projet « #{name} »"
   end
 
   def todo

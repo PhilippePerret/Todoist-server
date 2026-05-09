@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Vide les caches éventuels
+rm -rf ~/Library/Saved\ Application\ State/TodoistServer.savedState 2>/dev/null
+rm -rf ~/Library/Saved\ Application\ State/*TodoistServer* 2>/dev/null
+
 # Exécutable du bundle .app : lance le serveur Python.
 cd "/Users/philippeperret/Programmes/Todoist-server" || exit 1
 exec /usr/bin/env python3 server.py

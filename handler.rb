@@ -18,6 +18,11 @@ require_relative 'lib/projet'
 require_relative 'lib/fichier'
 require 'cgi'
 
+# Supprime les globales
+ObjectSpace.each_object(Class) do |klass|
+  klass.class_variables.each { |var| klass.remove_class_variable(var) } rescue nil
+end if defined?(ObjectSpace)
+
 raw    = ARGV[0].to_s
 params = CGI.parse(raw)
 # params est un Hash<String, Array<String>>, valeurs déjà URL-décodées.
@@ -80,7 +85,7 @@ end
 
 # Ouverture des données du projet (pour modifications)
 if d = param(params, 'd')
-  if projet = Projet.get(o)
+  if projet = Projet.get(d)
     projet.open_data_file
   end
 end

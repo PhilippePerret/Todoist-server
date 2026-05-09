@@ -181,7 +181,7 @@
   <button class="ctrl-btn start" id="startBtn" onclick="startTimer()">&#x25B6; DÉMARRER</button>
   <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">⏸ PAUSE</button>
   <button class="ctrl-btn stop" id="stopBtn" onclick="stopTimer()">&#x25A0; STOP</button>
-  <button class="ctrl-btn close-btn" onclick="isPopup ? window.close() : window.location.href='about:blank'">&#x2715; FERMER</button>
+  <button class="ctrl-btn close-btn" onclick="window.location.href='about:blank'">&#x2715; FERMER</button>
 </div>
 </div>
 
@@ -207,13 +207,12 @@
   ring.setAttribute('stroke-dasharray', CIRCUMFERENCE);
   ring.setAttribute('stroke-dashoffset', 0);
 
-  try { window.resizeTo(600, 640); } catch(e) {}
+  // try { window.resizeTo(600, 640); } catch(e) {}
 
-  const TodoContent = null;  // ← remplacé par handler.rb si tâches existantes
+  const TodoContent = null;  // ← remplacé par minuteur.rb si tâches existantes
   const urlParams = new URLSearchParams(window.location.search);
   const TOTAL = parseInt(urlParams.get('t') || '300', 10);
   const PROJECT  = urlParams.get('p') || '';
-  const isPopup   = window.opener !== null || urlParams.get('popup') === '1';
 
   let elapsedAtStop = 0;
 
@@ -227,6 +226,7 @@
   let overtime     = false;
   let overtimeTimeout = null;
   let timerLaunched   = false;  // true après le premier clic DEMO
+  let TodoistServerWindow = null ; // cf. plus bas
 
   function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
 
@@ -279,7 +279,6 @@
       warned = true;
       document.body.classList.add('warn');
       fetch('http://localhost:8000?warn=true').catch(() => {});
-      if (isPopup) window.focus();
     }
 
     // Temps écoulé : rouge + AppleScript ; après 30s sans Stop → overtime vert
@@ -288,7 +287,6 @@
       document.body.classList.remove('warn');
       document.body.classList.add('end');
       fetch('http://localhost:8000?warn=true').catch(() => {});
-      if (isPopup) window.focus();
       overtimeTimeout = setTimeout(() => {
         overtime = true;
         document.body.classList.remove('end');
@@ -322,23 +320,6 @@
   }
 
   function launchTimer() {
-    /*
-    if (!isPopup) {
-      const popupUrl = window.location.href + '&popup=1';
-      const pop = window.open(popupUrl, 'todoist_timer',
-        'width=460,height=580,left=770,top=40');
-      if (pop) {
-        window.focus();
-        document.getElementById('timer-area').style.display = 'none';
-        document.getElementById('bilan-panel').style.display = 'none';
-        document.getElementById('todo-panel').style.display = 'none';
-        document.body.insertAdjacentHTML('afterbegin',
-          '<p style="color:#555;font-family:monospace;font-size:12px;letter-spacing:0.3em;padding:40px;text-align:center">⏱ MINUTEUR EN COURS</p>');
-        return;
-      }
-    }
-    //*/
-    // On EST la popup (ou popup bloquée) : gérer le TodoContent ici
     if (!timerLaunched && TodoContent) {
       setState('prelaunch');  // 1re fois : montrer le todo
     } else {
@@ -353,7 +334,8 @@
     const done = document.getElementById('doneTa').value.trim();
     const todo = document.getElementById('todoTa').value.trim();
     const qs   = new URLSearchParams({ stop: 'true', elapsed: elapsedAtStop, p: PROJECT, done, todo });
-    window.location.href = 'http://localhost:8000?' + qs.toString();
+    TodoistServerWindow.location.href = 'http://localhost:8000?' + qs.toString();
+    window.close();
   }
 
   // ── Initialisation ─────────────────────────────────────────
@@ -400,7 +382,7 @@
   const WIDTH = 660;
   const LEFT = VWP_WIDTH + VWP_X
   function OpenServerInOtherWindow() {
-    window.open(TIMER_PATH, 'todoist-server',
+    TodoistServerWindow = window.open(TIMER_PATH, 'todoist-server',
           'width='+WIDTH+',height='+VWP_HEIGHT+',left='+LEFT+',top=40');
   }
   setTimeout(OpenServerInOtherWindow, 1000)
