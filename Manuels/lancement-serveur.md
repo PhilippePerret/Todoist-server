@@ -1,4 +1,11 @@
-# Lancement du serveur
+## TodoistServeur
+
+Ce terme recouvre deux choses :
+
+* l’application `Todoist-Server.app` qui lance le serveur python,
+* l’application web Safari (Safari Web App) qui reçoit `localhost:8000` (par Velja)
+
+## Lancement du serveur
 
 Pour lancer le serveur — qui se lance normalement au démarrage de l’ordinateur —, il faut double-cliquer sur le fichier `Todoist-Server.app` qui est une mini-app lançant le serveur python défini dans `server.py`.
 
@@ -13,3 +20,9 @@ kill $(lsof -ti :8000); sleep 0.5; python3 /Users/philippeperret/Programmes/Todo
 ~~~
 
 > Changer le port si nécessaire.
+
+## Contenu des pages et messages
+
+On ne peut pas ouvrir de « console web » pour TodoistServer (la SWA). Mais on peut l’obtenir sans Safari lui-même, dans le menu `Développement > <mon disque> > `
+
+> Demander l’affichage du menu Développement dans Safari le cas échéant.

@@ -331,11 +331,11 @@
   function startTimer() { timerLaunched = true; launchTimer(); }
 
   function validerBilan() {
+    console.log("-> ValiderBilan")
     const done = document.getElementById('doneTa').value.trim();
     const todo = document.getElementById('todoTa').value.trim();
     const qs   = new URLSearchParams({ stop: 'true', elapsed: elapsedAtStop, p: PROJECT, done, todo });
     TodoistServerWindow.location.href = 'http://localhost:8000?' + qs.toString();
-    window.close();
   }
 
   // ── Initialisation ─────────────────────────────────────────

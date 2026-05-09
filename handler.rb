@@ -64,6 +64,8 @@ if param(params, 'stop') == 'true'
     projet.addTodoContent(todo_md, false) if todo_md
     projet.save_data
   end
+  # Pour fermer le minuteur
+  system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to click button 1 of (every window whose name is "minuteur")')
   exit 0
 end
 
