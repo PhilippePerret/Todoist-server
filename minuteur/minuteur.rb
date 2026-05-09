@@ -16,5 +16,16 @@ class Minuteur
 
     end
 
+    # Pour fermer le minuteur
+    # Malheureusement, pour le moment, on est obligé de quitter l'application
+    # SWA TodoistServer sinon au prochain appel le minuteur ne se remet pas.
+    def close(projetId)
+      # system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to click button 1 of (every window whose name is "minuteur")')
+      # system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to quit')
+      system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to keystroke "q" using command down')
+      puts "Fermeture du minuteur (projet « #{Projet.get(projetId)&.name || 'inconnu'} »)"
+      nil
+    end
+
   end #/ << self
 end #/class Minuteur

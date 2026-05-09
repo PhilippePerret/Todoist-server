@@ -52,7 +52,14 @@ if param(params, 'warn') == 'true'
   exit 0
 end
 
+if param(params, 'op') == 'closeTimer'
+  require_relative 'minuteur/minuteur'
+  Minuteur.close(param(params, 'p'))
+  exit 0
+end
+
 if param(params, 'stop') == 'true'
+  require_relative 'minuteur/minuteur'
   elapsed  = param(params, 'elapsed').to_i
   done_md  = param(params, 'done'); done_md = nil if done_md&.empty?
   todo_md  = param(params, 'todo'); todo_md = nil if todo_md&.empty?
@@ -65,7 +72,7 @@ if param(params, 'stop') == 'true'
     projet.save_data
   end
   # Pour fermer le minuteur
-  system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to click button 1 of (every window whose name is "minuteur")')
+  Minuteur.close(param(params, 'p'))
   exit 0
 end
 

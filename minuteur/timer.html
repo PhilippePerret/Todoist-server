@@ -181,7 +181,7 @@
   <button class="ctrl-btn start" id="startBtn" onclick="startTimer()">&#x25B6; DÉMARRER</button>
   <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">⏸ PAUSE</button>
   <button class="ctrl-btn stop" id="stopBtn" onclick="stopTimer()">&#x25A0; STOP</button>
-  <button class="ctrl-btn close-btn" onclick="window.location.href='about:blank'">&#x2715; FERMER</button>
+  <button class="ctrl-btn close-btn" onclick="closeTimer()">&#x2715; FERMER</button>
 </div>
 </div>
 
@@ -331,10 +331,16 @@
   function startTimer() { timerLaunched = true; launchTimer(); }
 
   function validerBilan() {
-    console.log("-> ValiderBilan")
+    // console.log("-> ValiderBilan")
     const done = document.getElementById('doneTa').value.trim();
     const todo = document.getElementById('todoTa').value.trim();
     const qs   = new URLSearchParams({ stop: 'true', elapsed: elapsedAtStop, p: PROJECT, done, todo });
+    TodoistServerWindow.location.href = 'http://localhost:8000?' + qs.toString();
+  }
+
+  // Fonction appelée par le bouton "Fermer"
+  function closeTimer() {
+    const qs = new URLSearchParams({op: 'closeTimer', p: PROJECT})
     TodoistServerWindow.location.href = 'http://localhost:8000?' + qs.toString();
   }
 
