@@ -18,12 +18,20 @@ class Minuteur
 
     # Pour fermer le minuteur
     # Malheureusement, pour le moment, on est obligé de quitter l'application
-    # SWA TodoistServer sinon au prochain appel le minuteur ne se remet pas.
+    # SWA TodoistServer sinon au prochain appel le minuteur ne se remet pas…
+    # Et puis il faut même relancer le serveur pour que le bon projet soit
+    # pris en compte — c'est lourd, il faut vraiment trouver une solution…
     def close(projetId)
       # system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to click button 1 of (every window whose name is "minuteur")')
       # system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to quit')
-      system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to keystroke "q" using command down')
-      puts "Fermeture du minuteur (projet « #{Projet.get(projetId)&.name || 'inconnu'} »)"
+      # system('osascript', '-e', 'tell application "System Events" to tell process "TodoistServer" to keystroke "q" using command down')
+      # puts "Fermeture du minuteur (projet « #{Projet.get(projetId)&.name || 'inconnu'} »)"
+      # # On force le rechargement du serveur
+      # system('kill $(lsof -ti :8000); sleep 0.5; python3 /Users/philippeperret/Programmes/Todoist-server/server.py &')
+
+      require_relative '../lib/server'
+      Server.force_init
+
       nil
     end
 

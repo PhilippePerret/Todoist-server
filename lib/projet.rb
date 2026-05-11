@@ -48,7 +48,7 @@ class Projet
     if script = Script.get(self, script_root)
       # puts "script: #{script.inspect}"
       puts script.run
-      puts "🥳 Script #{script_root.inspect} joué avec succès."
+      # puts "🥳 Script #{script_root.inspect} joué avec succès."
     else
       erreur("Impossible de trouver le script #{script_root}")
     end
