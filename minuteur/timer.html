@@ -388,10 +388,12 @@
   const WIDTH = 660;
   const LEFT = VWP_WIDTH + VWP_X
   function OpenServerInOtherWindow() {
-    TodoistServerWindow = window.open(TIMER_PATH, 'todoist-server',
+    TodoistServerWindow = window.open(TIMER_PATH, 'todoist-server' + String(new Date().getTime()),
           'width='+WIDTH+',height='+VWP_HEIGHT+',left='+LEFT+',top=40');
   }
   setTimeout(OpenServerInOtherWindow, 1000)
+  // Maintenant, on démarre tout de suite le minuteur (sinon j'oublie)
+  setTimeout(startTimer, 3000)
 
 </script>
 </body>

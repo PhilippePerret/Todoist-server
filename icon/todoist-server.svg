@@ -1,41 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="60%" y2="100%">
-      <stop offset="0%" stop-color="#E8483A"/>
-      <stop offset="100%" stop-color="#B83028"/>
-    </linearGradient>
-    <clipPath id="clip">
-      <rect width="512" height="512" rx="112" ry="112"/>
-    </clipPath>
-  </defs>
-
-  <!-- Fond rouge arrondi -->
-  <rect width="512" height="512" rx="112" ry="112" fill="url(#bg)"/>
-
-  <g clip-path="url(#clip)">
-    <!-- Coche style Todoist -->
-    <polyline points="78,235 188,348 372,130"
-              fill="none" stroke="white" stroke-width="58"
-              stroke-linecap="round" stroke-linejoin="round"/>
-
-    <!-- Badge serveur (cercle blanc, coin bas-droite) -->
-    <circle cx="385" cy="388" r="78" fill="white" opacity="0.96"/>
-
-    <!-- Rack serveur : 3 rangées -->
-    <rect x="328" y="354" width="114" height="19" rx="5" fill="#DB4035"/>
-    <circle cx="409" cy="363.5" r="5" fill="white"/>
-    <circle cx="424" cy="363.5" r="5" fill="white"/>
-    <rect x="334" cy="363.5" width="60" height="4" rx="2" fill="white" opacity="0.4" y="361.5"/>
-
-    <rect x="328" y="379" width="114" height="19" rx="5" fill="#DB4035"/>
-    <circle cx="409" cy="388.5" r="5" fill="white"/>
-    <circle cx="424" cy="388.5" r="5" fill="white"/>
-    <rect x="334" y="386.5" width="60" height="4" rx="2" fill="white" opacity="0.4"/>
-
-    <rect x="328" y="404" width="114" height="19" rx="5" fill="#DB4035"/>
-    <circle cx="409" cy="413.5" r="5" fill="white"/>
-    <circle cx="424" cy="413.5" r="5" fill="white"/>
-    <rect x="334" y="411.5" width="60" height="4" rx="2" fill="white" opacity="0.4"/>
-  </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+        <path d="M512,165.734L512,346.266C512,437.737 437.737,512 346.266,512L165.734,512C74.263,512 0,437.737 0,346.266L0,165.734C0,74.263 74.263,0 165.734,0L346.266,0C437.737,0 512,74.263 512,165.734Z" style="fill:url(#_Linear1);"/>
+    </g>
+    <g>
+        <clipPath id="_clip2">
+            <path d="M512,112L512,400C512,461.814 461.814,512 400,512L112,512C50.186,512 0,461.814 0,400L0,112C0,50.186 50.186,0 112,0L400,0C461.814,0 512,50.186 512,112Z"/>
+        </clipPath>
+        <g clip-path="url(#_clip2)">
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M78,235L188,348L372,130" style="fill:none;fill-rule:nonzero;stroke:white;stroke-opacity:0.82;stroke-width:58px;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="385" cy="388" r="78" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M442,361.399L442,365.601C442,369.685 438.685,373 434.601,373L335.399,373C331.315,373 328,369.685 328,365.601L328,361.399C328,357.315 331.315,354 335.399,354L434.601,354C438.685,354 442,357.315 442,361.399Z" style="fill:rgb(219,64,53);fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="409" cy="363.5" r="5" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="424" cy="363.5" r="5" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M394,363.5C394,364.604 393.104,365.5 392,365.5L336,365.5C334.896,365.5 334,364.604 334,363.5C334,362.396 334.896,361.5 336,361.5L392,361.5C393.104,361.5 394,362.396 394,363.5Z" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M442,386.399L442,390.601C442,394.685 438.685,398 434.601,398L335.399,398C331.315,398 328,394.685 328,390.601L328,386.399C328,382.315 331.315,379 335.399,379L434.601,379C438.685,379 442,382.315 442,386.399Z" style="fill:rgb(219,64,53);fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="409" cy="388.5" r="5" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="424" cy="388.5" r="5" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M394,388.5C394,389.604 393.104,390.5 392,390.5L336,390.5C334.896,390.5 334,389.604 334,388.5C334,387.396 334.896,386.5 336,386.5L392,386.5C393.104,386.5 394,387.396 394,388.5Z" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M442,411.399L442,415.601C442,419.685 438.685,423 434.601,423L335.399,423C331.315,423 328,419.685 328,415.601L328,411.399C328,407.315 331.315,404 335.399,404L434.601,404C438.685,404 442,407.315 442,411.399Z" style="fill:rgb(219,64,53);fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="409" cy="413.5" r="5" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <circle cx="424" cy="413.5" r="5" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+            <g transform="matrix(0.675781,0,0,0.675781,83,83)">
+                <path d="M394,413.5C394,414.604 393.104,415.5 392,415.5L336,415.5C334.896,415.5 334,414.604 334,413.5C334,412.396 334.896,411.5 336,411.5L392,411.5C393.104,411.5 394,412.396 394,413.5Z" style="fill:white;fill-opacity:0.82;"/>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(307.2,512,-512,307.2,0,0)"><stop offset="0" style="stop-color:rgb(232,72,58);stop-opacity:0.82"/><stop offset="1" style="stop-color:rgb(184,48,40);stop-opacity:0.82"/></linearGradient>
+    </defs>
 </svg>
